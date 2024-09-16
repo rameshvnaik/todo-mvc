@@ -45,7 +45,7 @@ function nanoid(size = 21) {
 export const todoReducer = (state, action) => {
     switch (action.type) {
         case ADD_ITEM:
-            return state.map((todo) => (todo.neewelyAdded ? { ...todo, neewelyAdded: false } : todo)).concat({ id: nanoid(), title: action.payload.title, completed: false, neewelyAdded:true });
+            return state.map((todo) => (todo.neewelyAdded ? { ...todo, neewelyAdded: false } : todo)).concat({ id: nanoid(), title: action.payload.title, completed: false, neewelyAdded:true, createdAt:Date.now(), completedAt:null });
         case UPDATE_ITEM:
             return state.map((todo) => (todo.id === action.payload.id ? { ...todo, title: action.payload.title } : todo));
         case UPDATE_NEWELY_ADDED:
@@ -53,7 +53,7 @@ export const todoReducer = (state, action) => {
         case REMOVE_ITEM:
             return state.filter((todo) => todo.id !== action.payload.id);
         case TOGGLE_ITEM:
-            return state.map((todo) => (todo.id === action.payload.id ? { ...todo, completed: !todo.completed } : todo));
+            return state.map((todo) => (todo.id === action.payload.id ? { ...todo, completed: !todo.completed, completedAt:Date.now(),} : todo));
         case REMOVE_ALL_ITEMS:
             return [];
         case TOGGLE_ALL:
