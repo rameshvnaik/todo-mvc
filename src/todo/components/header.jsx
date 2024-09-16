@@ -8,7 +8,7 @@ export function Header({ dispatch }) {
     const timerRef = useRef(null); // To store the timer ID
 
 
-    const addWithTimeout = (title) => {
+    const addItem = useCallback((title) => {
        
         if (timerRef.current) {
           clearTimeout(timerRef.current);
@@ -18,15 +18,16 @@ export function Header({ dispatch }) {
         timerRef.current = setTimeout(() => {
          
             dispatch({ type: UPDATE_NEWELY_ADDED });
-        }, 15000); 
-    };
+        }, 15000);
+     },[dispatch]
+    );
 
-    const addItem = useCallback((title) => dispatch({ type: ADD_ITEM, payload: { title } }), [dispatch]);
+   // const addItem = useCallback((title) => dispatch({ type: ADD_ITEM, payload: { title } }), [dispatch]);
 
     return (
         <header className="header" data-testid="header">
             <h1>todos</h1>
-            <Input onSubmit={addWithTimeout} label="New Todo Input" placeholder="What needs to be done?" />
+            <Input onSubmit={addItem} label="New Todo Input" placeholder="What needs to be done?" />
         </header>
     );
 }
