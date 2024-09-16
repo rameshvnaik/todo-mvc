@@ -26,3 +26,27 @@ but useful for people who use screen readers */
 .newely-added{
     color: red !important;
 }
+
+.magenta{
+    color: #FF00FF !important;
+}
+
+.green{
+    color: green !important;
+}
+
+.yellow{
+    color: yellow !important;
+}
+
+.todo-card{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+
+}
+
+p{
+    font-size: 14px;
+}

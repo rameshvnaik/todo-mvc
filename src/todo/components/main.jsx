@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback,useState,useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Item } from "./item";
@@ -8,6 +8,8 @@ import { TOGGLE_ALL } from "../constants";
 
 export function Main({ todos, dispatch }) {
     const { pathname: route } = useLocation();
+    const [recentlyCompleted, setRecentlyCompleted] = useState([]);
+
 
     const visibleTodos = useMemo(
         () =>
@@ -23,6 +25,31 @@ export function Main({ todos, dispatch }) {
         [todos, route]
     );
 
+    const getRecentlyCompleted = () => {
+        return todos
+            .filter((todo) => todo.completed)
+            .sort((a, b) => b.completedAt - a.completedAt) // Sort by most recent first
+            .slice(0, 3); // Get the last 3 completed todos
+    };
+
+    useEffect(() => {
+        const recentlyComplete = getRecentlyCompleted();
+        setRecentlyCompleted(recentlyComplete);
+    }, [todos]);
+
+    const getColorForIndex = (index) => {
+        switch (index) {
+            case 0:
+                return 'green';            
+            case 1:
+                return 'magenta'; 
+            case 2:
+                return 'yellow';            
+             default:
+                return 'black'; 
+        }
+    };
+
     const toggleAll = useCallback((e) => dispatch({ type: TOGGLE_ALL, payload: { completed: e.target.checked } }), [dispatch]);
 
     return (
@@ -35,11 +62,22 @@ export function Main({ todos, dispatch }) {
                     </label>
                 </div>
             ) : null}
+            
+
             <ul className={classnames("todo-list")} data-testid="todo-list">
-                {visibleTodos.map((todo, index) => (
-                    <Item todo={todo} key={todo.id} dispatch={dispatch} index={index} />
-                ))}
+                {visibleTodos.map((todo, index) => {
+                    const recentIndex = recentlyCompleted.findIndex((item) => item.id === todo.id);
+                    
+                    const color = recentIndex !== -1 ? getColorForIndex(recentIndex) : 'black';
+
+                    return (
+                        <li key={todo.id} >
+                            <Item todo={todo} key={todo.id} dispatch={dispatch} index={index} color={color} />
+                        </li>
+                    );
+                })}
             </ul>
+
         </main>
     );
 }
