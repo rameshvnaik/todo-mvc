@@ -13,7 +13,6 @@ export function Header({ dispatch }) {
         if (timerRef.current) {
           clearTimeout(timerRef.current);
         }
-    
         dispatch({ type: ADD_ITEM, payload: { title } })
         timerRef.current = setTimeout(() => {
          
@@ -22,7 +21,6 @@ export function Header({ dispatch }) {
      },[dispatch]
     );
 
-   // const addItem = useCallback((title) => dispatch({ type: ADD_ITEM, payload: { title } }), [dispatch]);
 
     return (
         <header className="header" data-testid="header">
